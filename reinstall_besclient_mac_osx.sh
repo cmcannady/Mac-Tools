@@ -10,7 +10,7 @@
 ###########################################################################
 #
 #     Script:  reinstall_besclient_mac_osx.sh
-#     Version: 1.6
+#     Version: 1.7
 #     Created: 08/01/2024
 #     Updated: 08/05/2024
 #
@@ -86,7 +86,7 @@ if [ -f "${bes_key_store}/${besclient_ca_cert}" ] && \
 fi
 
 # Exit if BESClient KeyStore and known files present
-if [ ! $besclient_key_store_exists ]; then
+if [ $besclient_key_store_exists ]; then
   (>&2 echo BESClient KeyStore Files Present. ExitCode="2")
   exit 2
 fi
@@ -203,23 +203,6 @@ if (! $jamf_cache_exist) then
     exit $DLEXITCODE
   fi
 fi
-
-# Updating Mac firewall rules for BESClient
-echo "Adding firewall rules for BigFix communications on port 52311."
-# Add a new rule to allow incoming connections on port 52311 for both TCP and UDP
-/usr/libexec/ApplicationFirewall/socketfilterfw --add /usr/libexec/ApplicationFirewall/socketfilterfw
-/usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /usr/libexec/ApplicationFirewall/socketfilterfw
-# Allow incoming TCP traffic on port 52311
-/usr/libexec/ApplicationFirewall/socketfilterfw --add /usr/bin/nc
-/usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /usr/bin/nc
-# Open port 52311 for both TCP and UDP
-echo "Opening port 52311 for TCP and UDP"
-/usr/libexec/ApplicationFirewall/socketfilterfw --add /usr/bin/nc --port 52311 --protocol tcp
-/usr/libexec/ApplicationFirewall/socketfilterfw --add /usr/bin/nc --port 52311 --protocol udp
-# Restart the firewall to apply changes
-/usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate off
-/usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
-echo "Firewall rules updated. Port 52311 is now open for TCP and UDP traffic."
 
 # Reinstall BigFix client
 if [[ $INSTALLER == *.pkg ]]; then
