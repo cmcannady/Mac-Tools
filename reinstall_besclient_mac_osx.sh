@@ -163,14 +163,10 @@ if [ ! -d "$INSTALLDIR" ]; then
 fi
 
 # Check for existance of BESClient log file and installer in local JAMF cache
-if [ ! -f "/var/opt/BESClient/__BESData/__Global/Logs/`date +%Y%m%d`.log" ]; then
-  if [ ! -d "/var/opt/BESClient/__BESData/__Global/Logs" ]; then
-    if find "$jamf_cache" -maxdepth 1 -name "BESAgent-*-BigFix_MacOS11.0.pkg" -print -quit | grep -q .; then
-        echo "BESAgent installer package found in Jamf Pro cache.";
-        INSTALLER=$(find "$jamf_cache" -maxdepth 1 -name "BESAgent-*-BigFix_MacOS11.0.pkg" -print -quit)
-        jamf_cache_exist=true
-    fi
-  fi
+if find "$jamf_cache" -maxdepth 1 -name "BESAgent-*-BigFix_MacOS11.0.pkg" -print -quit | grep -q .; then
+    echo "BESAgent installer package found in Jamf Pro cache.";
+    INSTALLER=$(find "$jamf_cache" -maxdepth 1 -name "BESAgent-*-BigFix_MacOS11.0.pkg" -print -quit)
+    jamf_cache_exist=true
 fi
 
 DLEXITCODE=0
