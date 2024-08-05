@@ -10,7 +10,7 @@
 ###########################################################################
 #
 #     Script:  reinstall_besclient_mac_osx.sh
-#     Version: 1.7
+#     Version: 1.8
 #     Created: 08/01/2024
 #     Updated: 08/05/2024
 #
@@ -163,7 +163,7 @@ if [ ! -d "$INSTALLDIR" ]; then
 fi
 
 # Check for existance of BESClient log file and installer in local JAMF cache
-if find "$jamf_cache" -maxdepth 1 -name "BESAgent-*-BigFix_MacOS11.0.pkg" -print -quit | grep -q .; then
+if [find "$jamf_cache" -maxdepth 1 -name "BESAgent-*-BigFix_MacOS11.0.pkg" -print -quit | grep -q .]; then
     echo "BESAgent installer package found in Jamf Pro cache.";
     INSTALLER=$(find "$jamf_cache" -maxdepth 1 -name "BESAgent-*-BigFix_MacOS11.0.pkg" -print -quit)
     jamf_cache_exist=true
